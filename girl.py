@@ -4,30 +4,18 @@ from bs4 import BeautifulSoup
 import socket
 socket.setdefaulttimeout(5.0)
 
-
-
-targetDir =os.getcwd()
-papap=targetDir+"\\"
-
 def generateFileName(name):
     return str(uuid.uuid3(uuid.NAMESPACE_URL,name))
-  
-      
+
+      #mybaby
 # 根据文件名创建文件
-def createFileWithFileName(localPathParam,fileName):  
-    totalPath=localPathParam+'\\'+fileName  
-    if not os.path.exists(totalPath):  
-        file=open(totalPath,'a+')  
-        file.close()  
+def createFileWithFileName(localPathParam,fileName):
+    totalPath=localPathParam+'\\'+fileName
+    if not os.path.exists(totalPath):
+        file=open(totalPath,'a+')
+        file.close()
         return totalPath
 
-url2 = "http://www.meizitu.com/a/sifang_5_1.html"
-data=None
-headers = {
-    'content-type': 'application/json',
-           'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:22.0) Gecko/20100101 Firefox/22.0'
-    }
-false = False
 def meiziImg(url):
     s = requests.get(url,data=data,headers=headers)
     bs = BeautifulSoup(s.text,"html.parser")
@@ -90,16 +78,24 @@ def mulu(url):
             j = fanye(b)
             if j:
                 continue
+            
+targetDir =os.getcwd()
+papap=targetDir+"\\"
 
 
-mulu(url2)
-#meiziImg("http://www.meizitu.com/a/5240.html")
-
-#print(bs.prettify())
-#print(bs.select('img[class="s-news-img"]'))
-#for child in bs.descendants:
-#    print(child.class_="s-news-img")
-
+url2 = "http://www.meizitu.com/a/sifang_5_1.html"
+data=None
+headers = {
+    'content-type': 'application/json',
+           'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:22.0) Gecko/20100101 Firefox/22.0'
+    }
+false = False
+try:
+    
+    mulu(url2)
+except:
+    print ("Unexpected error:", sys.exc_info()) # sys.exc_info()返回出错信息
+    input('press enter key to exit') #这儿放一个等待输入是为了不让程序退出
 
 
 
