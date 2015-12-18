@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 import os
-import xlwt
-import xlrd
-from openpyxl import workbook,load_workbook
+from win32com.client import Dispatch
+import win32com.client
+import win32com
 
-import copy
 
+
+xlApp = None
 def get_data(path):
     #获取excel数据源
-    filePath = path #input(u"请将excel的文件路径粘贴进来")
+
+    filePath = os.getcwd()+"\\"+path+".xls" #input(u"请将excel的文件路径粘贴进来")
     is_valid = False
     try:
         if os.path.isfile(filePath):
@@ -17,7 +19,8 @@ def get_data(path):
                 is_valid = True
         data = None
         if is_valid:
-            data = load_workbook(filename = filePath)
+            xlApp = win32com.client.Dispatch('Excel.Application')
+            data = xlApp.Workbooks.Open(filePath)
     except Exception as e:
         print("错误%s"%e)
         return None
@@ -56,13 +59,27 @@ class time(object):
         self.overTime = overTime
 
 def read_excel(data):
-    r =  data.get_sheet_names()
-    for s in r:
-        print (s)
+    sheet2 = list(range(1,data.Worksheets.Count))
+    for x in sheet2:
+        print("%s号副表为：%s"%(x,data.Sheets(x).Name))
+    sheet = input("请输入需要计算工时的副表名：\n")
+    xValue = data.Worksheets(sheet)
+    cNum = 7
+    gNum = 6
+    rNum = 3
 
-    sname = input("输入想要的更改的表")
-    sheet2 = data[sname]
-    print(sheet2['D18'].value)
+    #mValue =  xValue.Cells(2,7).Value
+    MaxRow = xValue.UsedRange.Rows.Count
+    num = list(range(rNum,MaxRow+1))
+    for c in num:
+        uValue = xValue.Cells(c, cNum).Value
+        pValue = formTime(uValue)
+        myValue = countTime(breakTime(pValue.starTime), breakTime(pValue.overTime))
+        xValue.Cells(c, gNum).Value = myValue
+        print("正在修改第%d行工时为%d"%(c,myValue))
+    data.Close(SaveChanges=1)
+    return True
+
 
 
     # for num in list(range(2,len(cols))):
@@ -73,6 +90,9 @@ def read_excel(data):
 # l=formTime(gTime)
 # k = countTime(breakTime(l.starTime),breakTime(l.overTime))
 # print (k)
-l =get_data("E:\games\库备份\文档\全保科加点申报.xls")
+j = input("输入excel名称：\n")
+l = get_data(j)
 m= read_excel(l)
+if m:
+    print("操作完成")
 
