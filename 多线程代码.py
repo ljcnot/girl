@@ -64,7 +64,7 @@ class Crawler:
         newUrlList=[]
         for content in g_pages:
             newUrlList+=self.getUrl(content)
-        g_queueURL=list(set(newUrlList)-set(g_existURL))
+            g_queueURL=list(set(newUrlList)-set(g_existURL))
     def getUrl(self,content):
         reg=r'"(http://.+?)"'
         regob=re.compile(reg,re.DOTALL)
