@@ -13,6 +13,13 @@ p_downNum = 0 #已经下载过的连接数
 p_threadNum = 10
 p_threadpool = []
 
+class downImg:
+    def __init__(self):
+        self.
+
+
+
+
 def generateFileName(name):
     return str(uuid.uuid3(uuid.NAMESPACE_URL,name))
 
@@ -57,7 +64,7 @@ def qzurl(url):
             l=m.get("href")
             if t!=l:
                 print(l)
-                j= threading.Thread(target=meiziImg, args=l)
+                j= threading.Thread(target = meiziImg, args=l)
                 j.setDaemon(True)
                 j.start()
                 p_threadpool.append(j)
@@ -69,11 +76,13 @@ def qzurl(url):
     return false
 myReferer = ""
 def headers_value():
+    global myReferer
     headers = {"Host": "www.meizitu.com","User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0","Accept": "image/png,image/*;q=0.8,*/*;q=0.5","Accept-Language": "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3","Accept-Encoding": "gzip, deflate","Referer":myReferer,"Cookie": "BAIDUID=E7640F5E0492BC620C23C0A8B7012A1C:FG=1; HMACCOUNT=5DA7BAB08C224046; BIDUPSID=E7640F5E0492BC620C23C0A8B7012A1C; PSTM=1450504738; H_PS_PSSID=17747_1420_18240_12824_18501_17001_17073_15742_12089","Connection": "keep-alive"}
     return headers
 def fanye(url):
     g = r"http://www.meizitu.com/a/"
-    myReferer = url
+    global myReferer
+    myReferer= url
     s = requests.get(url, data=data, headers=headers_value())
     gs = BeautifulSoup(s.text,"html.parser")
     i = gs.find_all(id = "wp_page_numbers")
@@ -90,6 +99,7 @@ def fanye(url):
 
 
 def mulu(url):
+    global myReferer
     myReferer = url
     s= requests.get(url, data=data, headers=headers_value())
     gs= BeautifulSoup(s.text, "html.parser")
