@@ -64,7 +64,7 @@ class Crawler:
         newUrlList=[]
         for content in g_pages:
             newUrlList+=self.getUrl(content)
-        g_queueURL=list(set(newUrlList)-set(g_existURL))
+            g_queueURL=list(set(newUrlList)-set(g_existURL))
     def getUrl(self,content):
         reg=r'"(http://.+?)"'
         regob=re.compile(reg,re.DOTALL)
@@ -72,6 +72,12 @@ class Crawler:
         return urllist
 
 class CrawlerThread(threading.Thread):
+            page=urllib.urlopen(self.url)
+            html=page.read()
+            fout=file(self.filename,'w')
+            fout.write(html)
+            fout.close()
+        except Exception,e:
     def __init__(self,url,filename,tid):
         threading.Thread.__init__(self)
         self.url=url
@@ -82,12 +88,6 @@ class CrawlerThread(threading.Thread):
         global g_failedURL
         global g_queueURL
         try:
-            page=urllib.urlopen(self.url)
-            html=page.read()
-            fout=file(self.filename,'w')
-            fout.write(html)
-            fout.close()
-        except Exception,e:
             g_mutex.acquire()
             g_existURL.append(self.url)
             g_failedURL.append(self.url)
