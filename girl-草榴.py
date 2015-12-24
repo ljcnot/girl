@@ -5,8 +5,8 @@ import socket
 import threading
 from collections import deque
 from time import sleep
-import pymysql
-
+import string
+socket.setdefaulttimeout(30)
 p_jclock = threading.Condition() #进程锁调用
 p_newPath = deque([]) #最新解析的url链接表
 p_stanPath = deque([]) #等待爬取的url链接表
@@ -20,15 +20,6 @@ p_downNum = 0 #已经下载过的连接数
 p_threadNum = 5
 url_thread = []
 img_thread = []
-
-class pysql:
-	def __init__(self):
-		self.conn = pymysql.connect(host="localhost",user="root",passwd="lw930522")#数据库连接字符串
-	def connDB(self):
-		self.cur = self.conn.cursor()
-	def closeDB(self):
-		self.cur.close()
-		self.conn.close()
 
 class spider:
 	def __init__(self,url):
@@ -51,59 +42,48 @@ class superUrl(threading.Thread):
 		while(len(p_stanPath)!=0):
 			try:
 				url = p_stanPath.popleft()
-				socket.setdefaulttimeout(10)
-				try:
-					url_obj = requests.get(url,data=None,headers=self.headers(url))
-				except socket.gaierror as e:
-					print(e)
-					p_existPath.append(url)
-					continue
+				url_obj = requests.get(url,data=None,headers=self.headers(url))
+				url_obj.encoding = 'gb18030'
 				html = BeautifulSoup(url_obj.text, "html.parser")
-				ListUrl = html.find_all("a")
-				for my_url in ListUrl:
-					new_url = my_url.get("href")
-					if new_url ==None:
-						continue
-					pd_url = new_url[:7]
-					if pd_url ==r"http://"and new_url.split('/')[2]==r'www.ugirl.cc'and new_url.split(".")[-1]!=r"jpg" and new_url not in p_existPath:
-						p_stanPath.append(new_url) #增加新的url给戴爬取的地址池
-				try:
-					self.img_get(url,html)
-				except urllib.request.URLError as e:
-					print(e)
-					sleep(10)
-				p_existPath.append(url)
-				url_obj.close()
-				p_stanPath = deque(set(p_stanPath)-set(p_existPath))
+				listDiv = html.find_all("h3")
+				for ListUrl in listDiv:
+					for my_url in ListUrl.find_all("a",id=""):
+						new_url = r"http://clsq.co//"+my_url.get("href")
+						if my_url.get("href") ==None:
+							continue
+						try:
+							url_obj.close()
+							self.img_get(new_url)
+						except Exception as e:
+							print(e)
+					p_existPath.append(url)
+					p_stanPath = deque(set(p_stanPath)-set(p_existPath))
 			except urllib.request.URLError as e:
 				print(e)
-				sleep(10)
-			except urllib.request.HTTPError as e:
-				print(e)
-				sleep(10)
-			else:
-				continue
-	def img_get(self, i_url, html):
+	def img_get(self, i_url ):
 		try:
-			img_url =i_url
-			img_html = html
-			girlImg = img_html.find_all('div', id="gallery-1")
+			img_url =requests.get(i_url,data=None,headers=self.headers(i_url))
+			img_url.encoding = 'gb18030'
+			img_html = BeautifulSoup(img_url.text,"html.parser")
+			girlImg = img_html.find_all('input', type="image")
 			if girlImg ==[]:
+				img_url.close()
 				print("这个地址没有图片:"+img_url)
+				return False
 			else:
-				for imglist in girlImg:
-					for img_p in imglist.find_all("a"):
-						new_imgUrl = img_p.get('href')
+					for img_p in girlImg:
+						new_imgUrl = img_p.get('src')
 						title = img_html.title.string
 						title_Path.append(title)
 						img_down.append(new_imgUrl)
 						#print("标题：%s"%title)
 						print("添加%s到下载列表："%new_imgUrl)
+					img_url.close()
 		except Exception as e:
 			print(e)
 
 	def headers(self,url):
-		headers = {"Host": "www.ugirl.cc","User-Agent": "Baiduspider+(+http://www.baidu.com/search/spider.htm)","Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8","Accept-Language":"zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3","Accept-Encoding": "gzip, deflate","Referer":url,"Cookie":"wordpress_logged_in_1659196acd36bd2b798dfa976ded9f1e=%7C1452086134%7Cb65ecd697ed38dadb0de585ad7febb58; CNZZDATA1253518311=1277843620-1450516010-%7C1450874913; BDTUJIAID=711e5a906be928a3037ff4af2efce767; PHPSESSID=not5qm0kd4d1528a0432llvhr6","Connection":"close"}
+		headers = {"Host": "clsq.co","User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0","Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8","Accept-Language":"zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3","Accept-Encoding": "gzip, deflate","Referer":url,"Connection":"keep-alive","If-None-Match":'W/"2460be1-74a8-527907f9bfff5',"Cache-Control": "max-age=0"}
 		return headers
 
 class downThread(threading.Thread):
@@ -125,8 +105,13 @@ class downThread(threading.Thread):
 			imgname = self.imgFileName()
 			if not os.path.exists(imgname):
 				print("正在爬:"+self.url)
-				socket.setdefaulttimeout(10)
-				urllib.request.urlretrieve(self.url, imgname)
+				img_req = urllib.request.Request(self.url,headers=self.headers(self.url))
+				response = urllib.request.urlopen(img_req)
+				data = response.read()
+				f = open(imgname,'wb')
+				f.write(data)
+				f.close()
+				#urllib.request.urlretrieve(img_req, imgname)
 			else:
 				print(self.url+"这个妹子已经爬过了")
 	def namePz(self):
@@ -138,6 +123,7 @@ class downThread(threading.Thread):
 		self.name = self.name.replace('<','-')
 		self.name = self.name.replace('>','-')
 		self.name = self.name.replace('|','-')
+		self.name = self.name.replace('.','-')
 	def generateFileName(self,name):
 		return str(uuid.uuid3(uuid.NAMESPACE_URL,name))
 
@@ -149,11 +135,20 @@ class downThread(threading.Thread):
 		totalPath = folderFile+"\\"+fileName
 		return totalPath
 	def headers(self,url):
-		headers = {"Host": "www.ugirl.cc","User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0","Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8","Accept-Language":"zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3","Accept-Encoding": "gzip, deflate","Referer":url,"Cookie":"wordpress_logged_in_1659196acd36bd2b798dfa976ded9f1e=%7C1452078328%7C300cdc3567f74a8f71b99d6bfc6bb98b; CNZZDATA1253518311=1277843620-1450516010-%7C1450866964; BDTUJIAID=711e5a906be928a3037ff4af2efce767; PHPSESSID=qlr05lkvjf5n85a4cpvlc8vd55","Connection":"close"}
+		#host_list = url.split(".")
+		# http=(host_list[0])[8:]
+		# host =  http+"."+host_list[1]+"."+host_list[2]
+		headers = {"User-Agent":"Googlebot/2.1 (+http://www.google.com/bot.html)" ,"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8","Accept-Language":"zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3","Accept-Encoding": "gzip, deflate","Referer":url,"Connection":"close"}
 		return headers
 
 if __name__ == "__main__":
-	url = r"http://www.ugirl.cc"#input("输入目标网址:\n")
+	url = r"http://clsq.co/thread0806.php?fid=16&search=&page=2"#input("输入目标网址:\n")
+	for l in range(2,100):
+		url_c = url.split("=")
+		url_c[-1] = str(l)
+		str_c = "="
+		new_url_c =str_c.join(url_c)
+		p_stanPath.append(new_url_c)
 	imgload = spider(url)
 	imgload.upup()
 	num= 0
@@ -161,6 +156,7 @@ if __name__ == "__main__":
 	for u in url_thread:
 		u.start()
 		sleep(5)
+
 	error_num =0
 	while True:
 		if(len(img_down)==0):
