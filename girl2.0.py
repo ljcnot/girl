@@ -6,8 +6,8 @@ import threading
 from collections import deque
 from time import sleep
 import pymysql
-
-p_jclock = threading.Condition() #进程锁调用
+import copy
+p_jclock = threading.Event()  #进程锁调ni用
 p_newPath = deque([]) #最新解析的url链接表
 p_stanPath = deque([]) #等待爬取的url链接表
 p_existPath = deque([]) #已经爬取过的url链接表
@@ -20,16 +20,66 @@ p_downNum = 0 #已经下载过的连接数
 p_threadNum = 5
 url_thread = []
 img_thread = []
-
+path_Num = 0
+uplock = False
 class pysql:
 	def __init__(self):
-		self.conn = pymysql.connect(host="localhost",user="root",passwd="lw930522")#数据库连接字符串
+		self.conn = pymysql.connect(host="localhost", port=3306, user="root", passwd="lw930522", db='girl', charset="utf8")#数据库连接字符串
 	def connDB(self):
 		self.cur = self.conn.cursor()
 	def closeDB(self):
 		self.cur.close()
 		self.conn.close()
-
+	def update(self):
+		global uplock
+		self.deldate('stanpath_table')
+		for url in p_stanPath:
+			sql = "INSERT INTO stanpath_table(stanPath)VALUES(\'"+url+"\')"#将url地址池的数据插入数据库
+			self.cur.execute(sql)
+			self.conn.commit()
+		self.deldate('existpath_table')
+		for url in p_existPath:
+			sql = "INSERT INTO existpath_table(existPath)VALUES(\'"+url+"\')"
+			self.cur.execute(sql)
+			self.conn.commit()
+		self.deldate('img_down_table')
+		uplock =True
+		sleep(2)
+		for url in img_down:
+			sql = "INSERT INTO img_down_table(img_down)VALUES(\'"+url+"\')"
+			self.cur.execute(sql)
+			self.conn.commit()
+		self.deldate('title_path_table')
+		for url in title_Path:
+			#url.encode("utf-8")
+			sql = "INSERT INTO title_path_table(title_Path)VALUES(\'"+url+"\')"
+			#sql.encode("utf-8")
+			self.cur.execute(sql)
+			self.conn.commit()
+		uplock = False
+		sleep(2)
+		p_jclock.set()
+	def deldate(self,table):               #删除table中的数据
+		sql = "TRUNCATE TABLE "+table
+		self.cur.execute(sql)
+		self.conn.commit()
+	def pull(self):
+		sql = "select stanPath from stanpath_table"  #获取待下载url池
+		self.cur.execute(sql)
+		for each in self.cur:
+			p_stanPath.append(each)
+		sql = "select existPath from existpath_table" #获取已下载的url地址池
+		self.cur.execute(sql)
+		for each in self.cur:
+			p_existPath.append(each)
+		sql = "select img_down from img_down_table" #获取待下载的img地址池
+		self.cur.execute(sql)
+		for each in self.cur:
+			img_down.append(each)
+		sql = "select title_Path from title_path_table" #获取待下载的title地址池
+		self.cur.execute(sql)
+		for each in self.cur:
+			title_Path.append(each)
 class spider:
 	def __init__(self,url):
 		self.img_downThreadNum = 4
@@ -48,6 +98,7 @@ class superUrl(threading.Thread):
 	def run(self):
 		global p_stanPath
 		global p_existPath
+		global path_Num
 		while(len(p_stanPath)!=0):
 			try:
 				url = p_stanPath.popleft()
@@ -75,6 +126,10 @@ class superUrl(threading.Thread):
 				p_existPath.append(url)
 				url_obj.close()
 				p_stanPath = deque(set(p_stanPath)-set(p_existPath))
+				path_Num+=1
+				if path_Num>15:
+					path_Num=0
+					pushdata()
 			except urllib.request.URLError as e:
 				print(e)
 				sleep(10)
@@ -109,15 +164,20 @@ class superUrl(threading.Thread):
 class downThread(threading.Thread):
 	def __init__(self):
 		threading.Thread.__init__(self)
+		global p_jclock
+		global uplock
 		self.title=""
 		self.url=""
 		self.name=""
+		self.p_jclock = p_jclock
 		self.nowFile = os.getcwd()
 	def run(self):
 		global img_downed
 		global img_down
 		if (len(title_Path)!=0 and len(img_down)!=0):
-			#img_down = deque(set(img_down)-set(img_downed))
+			if(uplock):
+				self.p_jclock.wait()
+				print("线程解锁")
 			self.name = title_Path.popleft()
 			self.url = img_down.popleft()
 			self.namePz()
@@ -151,8 +211,30 @@ class downThread(threading.Thread):
 	def headers(self,url):
 		headers = {"Host": "www.ugirl.cc","User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0","Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8","Accept-Language":"zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3","Accept-Encoding": "gzip, deflate","Referer":url,"Cookie":"wordpress_logged_in_1659196acd36bd2b798dfa976ded9f1e=%7C1452078328%7C300cdc3567f74a8f71b99d6bfc6bb98b; CNZZDATA1253518311=1277843620-1450516010-%7C1450866964; BDTUJIAID=711e5a906be928a3037ff4af2efce767; PHPSESSID=qlr05lkvjf5n85a4cpvlc8vd55","Connection":"close"}
 		return headers
-
+def pushdata():
+	db = pysql()
+	try:
+		db.connDB()
+		db.update()
+		db.closeDB()
+		print("上传地址池成功")
+	except Exception as e:
+		print(e)
+		db.closeDB()
+		print("上传地址池失败")
+def pulldata():
+	db = pysql()
+	try:
+		db.connDB()
+		db.pull()
+		db.closeDB()
+		print("加载地址池成功")
+	except Exception as e:
+		print(e)
+		db.closeDB()
+		print("初始化获取地址池失败")
 if __name__ == "__main__":
+	#pulldata()
 	url = r"http://www.ugirl.cc"#input("输入目标网址:\n")
 	imgload = spider(url)
 	imgload.upup()
