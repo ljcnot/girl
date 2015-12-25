@@ -21,6 +21,63 @@ p_threadNum = 5
 url_thread = []
 img_thread = []
 
+class pysql:
+	def __init__(self):
+		self.conn = pymysql.connect(host="localhost", port=3306, user="root", passwd="lw930522", db='girl', charset="utf8")#数据库连接字符串
+	def connDB(self):
+		self.cur = self.conn.cursor()
+	def closeDB(self):
+		self.cur.close()
+		self.conn.close()
+	def update(self):
+		global uplock
+		global p_jclock
+		uplock =True
+		self.deldate('stanpath_table')
+		for url in p_stanPath:
+			sql = "INSERT INTO stanpath_table(stanPath)VALUES(\'"+url+"\')"#将url地址池的数据插入数据库
+			self.cur.execute(sql)
+			self.conn.commit()
+		self.deldate('existpath_table')
+		for url in p_existPath:
+			sql = "INSERT INTO existpath_table(existPath)VALUES(\'"+url+"\')"
+			self.cur.execute(sql)
+			self.conn.commit()
+		self.deldate('img_down_table')
+		for url in img_down:
+			sql = "INSERT INTO img_down_table(img_down)VALUES(\'"+url+"\')"
+			self.cur.execute(sql)
+			self.conn.commit()
+		self.deldate('title_path_table')
+		for url in title_Path:
+			#url.encode("utf-8")
+			sql = "INSERT INTO title_path_table(title_Path)VALUES(\'"+url+"\')"
+			#sql.encode("utf-8")
+			self.cur.execute(sql)
+			self.conn.commit()
+
+	def deldate(self,table):               #删除table中的数据
+		sql = "TRUNCATE TABLE "+table
+		self.cur.execute(sql)
+		self.conn.commit()
+	def pull(self):
+		sql = "select stanPath from stanpath_table"  #获取待下载url池
+		self.cur.execute(sql)
+		for each in self.cur:
+			p_stanPath.append(each)
+		sql = "select existPath from existpath_table" #获取已下载的url地址池
+		self.cur.execute(sql)
+		for each in self.cur:
+			p_existPath.append(each)
+		sql = "select img_down from img_down_table" #获取待下载的img地址池
+		self.cur.execute(sql)
+		for each in self.cur:
+			img_down.append(each)
+		sql = "select title_Path from title_path_table" #获取待下载的title地址池
+		self.cur.execute(sql)
+		for each in self.cur:
+			title_Path.append(each)
+
 class spider:
 	def __init__(self,url):
 		self.img_downThreadNum = 4

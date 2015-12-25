@@ -7,7 +7,7 @@ from collections import deque
 from time import sleep
 import pymysql
 import copy
-p_jclock = threading.Event()  #进程锁调ni用
+p_jclock = threading.Condition()  #进程锁调ni用
 p_newPath = deque([]) #最新解析的url链接表
 p_stanPath = deque([]) #等待爬取的url链接表
 p_existPath = deque([]) #已经爬取过的url链接表
@@ -32,6 +32,8 @@ class pysql:
 		self.conn.close()
 	def update(self):
 		global uplock
+		global p_jclock
+		uplock =True
 		self.deldate('stanpath_table')
 		for url in p_stanPath:
 			sql = "INSERT INTO stanpath_table(stanPath)VALUES(\'"+url+"\')"#将url地址池的数据插入数据库
@@ -43,8 +45,6 @@ class pysql:
 			self.cur.execute(sql)
 			self.conn.commit()
 		self.deldate('img_down_table')
-		uplock =True
-		sleep(2)
 		for url in img_down:
 			sql = "INSERT INTO img_down_table(img_down)VALUES(\'"+url+"\')"
 			self.cur.execute(sql)
@@ -56,9 +56,6 @@ class pysql:
 			#sql.encode("utf-8")
 			self.cur.execute(sql)
 			self.conn.commit()
-		uplock = False
-		sleep(2)
-		p_jclock.set()
 	def deldate(self,table):               #删除table中的数据
 		sql = "TRUNCATE TABLE "+table
 		self.cur.execute(sql)
@@ -127,7 +124,7 @@ class superUrl(threading.Thread):
 				url_obj.close()
 				p_stanPath = deque(set(p_stanPath)-set(p_existPath))
 				path_Num+=1
-				if path_Num>15:
+				if path_Num>100:
 					path_Num=0
 					pushdata()
 			except urllib.request.URLError as e:
@@ -162,22 +159,21 @@ class superUrl(threading.Thread):
 		return headers
 
 class downThread(threading.Thread):
-	def __init__(self):
+	def __init__(self,  singal):
 		threading.Thread.__init__(self)
-		global p_jclock
-		global uplock
 		self.title=""
 		self.url=""
 		self.name=""
-		self.p_jclock = p_jclock
+		self.p_jclock =  singal
 		self.nowFile = os.getcwd()
 	def run(self):
 		global img_downed
 		global img_down
+		global uplock
 		if (len(title_Path)!=0 and len(img_down)!=0):
-			if(uplock):
-				self.p_jclock.wait()
-				print("线程解锁")
+			while(uplock):
+				sleep(1)
+				print("线程等待中")
 			self.name = title_Path.popleft()
 			self.url = img_down.popleft()
 			self.namePz()
@@ -213,14 +209,19 @@ class downThread(threading.Thread):
 		return headers
 def pushdata():
 	db = pysql()
+	global uplock
 	try:
+		print("开始上传地址池")
 		db.connDB()
 		db.update()
 		db.closeDB()
+		uplock = False
 		print("上传地址池成功")
+		print("解锁所有线程")
 	except Exception as e:
 		print(e)
 		db.closeDB()
+		uplock = False
 		print("上传地址池失败")
 def pulldata():
 	db = pysql()
@@ -255,8 +256,8 @@ if __name__ == "__main__":
 			continue
 		else:
 			error_num =0
-			for m in range(2):
-				m =downThread()
+			for m in range(1):
+				m =downThread(p_jclock)
 				img_thread.append(m)
 				m.start()
 			for m in img_thread:
