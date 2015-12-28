@@ -45,21 +45,16 @@ class pysql:
 			self.conn.commit()
 		self.deldate('img_down_table')
 		for url in img_down:
-			sql = "INSERT INTO img_down_table(img_down)VALUES(\'"+url+"\')"
-			self.cur.execute(sql)
-			self.conn.commit()
-		self.deldate('title_path_table')
-		for url in title_Path:
-			#url.encode("utf-8")
-			sql = "INSERT INTO title_path_table(title_Path)VALUES(\'"+url+"\')"
-			#sql.encode("utf-8")
+			text= url.split("&img=")[0]
+			img_urlbd = url.split("&img=")[1]
+			sql = "INSERT INTO img_down_table(text,img)VALUES(\'"+text+"\',\'"+img_urlbd+"\')"
 			self.cur.execute(sql)
 			self.conn.commit()
 
 class spider:
 	def __init__(self,url):
 		self.img_downThreadNum = 4
-		self.url_threadNum = 1
+		self.url_threadNum = 2
 		p_stanPath.append(url)
 	def upup(self):
 		for i in range(self.url_threadNum):
@@ -70,7 +65,6 @@ class spider:
 class superUrl(threading.Thread):
 	def __init__(self):
 		threading.Thread.__init__(self)
-
 	def run(self):
 		global p_stanPath
 		global p_existPath
@@ -80,14 +74,15 @@ class superUrl(threading.Thread):
 				url_obj = requests.get(url,data=None,headers=self.headers(url))
 				html = BeautifulSoup(url_obj.text, "html.parser")
 				Listpage = html.find("ul",class_="pagination")
-				for ListUrl in Listpage.find_all("a",rel="nofollow"):
+				ListUrl_u = Listpage.find_all("a",rel="nofollow")
+				for ListUrl in ListUrl_u:
 					new_url = r"http://www.qiushibaike.com"+ListUrl.get("href")
 					if new_url ==None:
 						continue
 					if new_url.split(".")[-1]!=r"jpg" and new_url not in p_existPath:
 						p_stanPath.append(new_url) #增加新的url给戴爬取的地址池
 				try:
-					self.img_get(url,html)
+					self.img_get(html)
 				except  urllib.request.URLError as e:
 					print(e)
 					sleep(10)
@@ -96,35 +91,26 @@ class superUrl(threading.Thread):
 			except urllib.request.URLError as e:
 				print(e)
 				sleep(10)
-			except urllib.request.HTTPError as e:
-				print(e)
-			else:
-				continue
-	def img_get(self, i_url, html):
+	def img_get(self, html):
 		try:
-			img_url =i_url
 			img_html = html
 			xhhtml = img_html.find('div', id="content-left")
-			if xhhtml ==[]:
-				print("这个地址没有图片:"+img_url)
-			else:
-				for imglist in xhhtml.find_all('div', class_="content"):
-					new_imgUrl = imglist.text
-					this_imgurl = imglist.find_next_siblings('div', class_="thumb")
-					if (this_imgurl !=None):
-						url_img = this_imgurl.find('img')
-						new_url_img = url_img.get('src')
-						img_down.append(new_url_img)
-					title = img_html.title.string
-					title_Path.append(title)
-					img_down.append(new_imgUrl)
-					#print("标题：%s"%title)
-					print("添加%s到下载列表："%new_imgUrl)
+			for imglist in xhhtml.find_all('div', class_="content"):
+				new_imgUrl = imglist.text
+				this_imgurl = imglist.find_next_siblings('div', class_="thumb")
+				url_img = this_imgurl.find('img')
+				new_url_img = url_img.get('src')
+				if new_url_img is None:
+					new_url_img = ""
+				new_url = new_imgUrl + "&img="+ new_url_img
+				img_down.append(new_url)
+				#print("标题：%s"%title)
+				print("添加%s："%new_url)
 		except Exception as e:
 			print(e)
 
 	def headers(self,url):
-		headers = {"Host": "www.qiushibaike.com","User-Agent": "Baiduspider+(+http://www.baidu.com/search/spider.htm)","Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8","Accept-Language":"zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3","Accept-Encoding": "gzip, deflate","Referer":url,"Cookie":"wordpress_logged_in_1659196acd36bd2b798dfa976ded9f1e=%7C1452086134%7Cb65ecd697ed38dadb0de585ad7febb58; CNZZDATA1253518311=1277843620-1450516010-%7C1450874913; BDTUJIAID=711e5a906be928a3037ff4af2efce767; PHPSESSID=not5qm0kd4d1528a0432llvhr6","Connection":"close"}
+		headers = {"Host": "www.qiushibaike.com","User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0","Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8","Accept-Language":"zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3","Accept-Encoding": "gzip, deflate","Referer":url,"Connection":"close"}
 		return headers
 
 class downThread(threading.Thread):
@@ -174,35 +160,16 @@ class downThread(threading.Thread):
 
 if __name__ == "__main__":
 	url = r"http://www.qiushibaike.com/"#input("输入目标网址:\n")
-	imgload = spider(url)
-	imgload.upup()
-	num= 0
-	error = 5
+	p_stanPath.append(url)
+	for i in range(1):
+		imgload = superUrl()
+		imgload.start()
+		url_thread.append(imgload)
 	for u in url_thread:
-		u.start()
-		sleep(5)
+		u.join()
 
-	while True:
-		if(len(img_down)==0):
-			print("等待添加下载地址")
-			sleep(5)
-			continue
-		else:
-			for m in range(2):
-				m =downThread()
-				img_thread.append(m)
-				m.start()
-			for m in img_thread:
-				m.join()
-		if(len(p_stanPath)==0):
-			print("下载完成")
-			sleep(5)
-			continue
-		else:
-			m = superUrl()
-			m.start()
-	for i in img_thread:
-		i.join()
+
+
 
 
 
