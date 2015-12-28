@@ -5,7 +5,7 @@ import socket
 import threading
 from collections import deque
 from time import sleep
-import string
+import pymysql
 socket.setdefaulttimeout(15)
 p_jclock = threading.Condition() #进程锁调用
 p_newPath = deque([]) #最新解析的url链接表
@@ -20,6 +20,42 @@ p_downNum = 0 #已经下载过的连接数
 p_threadNum = 5
 url_thread = []
 img_thread = []
+
+class pysql:
+	def __init__(self):
+		self.conn = pymysql.connect(host="localhost", port=3306, user="root", passwd="lw930522", db='qsbk', charset="utf8")#数据库连接字符串
+	def connDB(self):
+		self.cur = self.conn.cursor()
+	def closeDB(self):
+		self.cur.close()
+		self.conn.close()
+	def update(self):
+		global uplock
+		global p_jclock
+		uplock =True
+		self.deldate('stanpath_table')
+		for url in p_stanPath:
+			sql = "INSERT INTO stanpath_table(stanPath)VALUES(\'"+url+"\')"#将url地址池的数据插入数据库
+			self.cur.execute(sql)
+			self.conn.commit()
+		self.deldate('existpath_table')
+		for url in p_existPath:
+			sql = "INSERT INTO existpath_table(existPath)VALUES(\'"+url+"\')"
+			self.cur.execute(sql)
+			self.conn.commit()
+		self.deldate('img_down_table')
+		for url in img_down:
+			sql = "INSERT INTO img_down_table(img_down)VALUES(\'"+url+"\')"
+			self.cur.execute(sql)
+			self.conn.commit()
+		self.deldate('title_path_table')
+		for url in title_Path:
+			#url.encode("utf-8")
+			sql = "INSERT INTO title_path_table(title_Path)VALUES(\'"+url+"\')"
+			#sql.encode("utf-8")
+			self.cur.execute(sql)
+			self.conn.commit()
+
 class spider:
 	def __init__(self,url):
 		self.img_downThreadNum = 4
@@ -43,7 +79,7 @@ class superUrl(threading.Thread):
 				url = p_stanPath.popleft()
 				url_obj = requests.get(url,data=None,headers=self.headers(url))
 				html = BeautifulSoup(url_obj.text, "html.parser")
-				Listpage = html.find_all("div",class_="pagenumber")
+				Listpage = html.find("ul",class_="pagination")
 				for ListUrl in Listpage.find_all("a",rel="nofollow"):
 					new_url = r"http://www.qiushibaike.com"+ListUrl.get("href")
 					if new_url ==None:
@@ -68,18 +104,22 @@ class superUrl(threading.Thread):
 		try:
 			img_url =i_url
 			img_html = html
-			girlImg = img_html.find_all('div', id="gallery-1")
-			if girlImg ==[]:
+			xhhtml = img_html.find('div', id="content-left")
+			if xhhtml ==[]:
 				print("这个地址没有图片:"+img_url)
 			else:
-				for imglist in girlImg:
-					for img_p in imglist.find_all("a"):
-						new_imgUrl = img_p.get('href')
-						title = img_html.title.string
-						title_Path.append(title)
-						img_down.append(new_imgUrl)
-						#print("标题：%s"%title)
-						print("添加%s到下载列表："%new_imgUrl)
+				for imglist in xhhtml.find_all('div', class_="content"):
+					new_imgUrl = imglist.text
+					this_imgurl = imglist.find_next_siblings('div', class_="thumb")
+					if (this_imgurl !=None):
+						url_img = this_imgurl.find('img')
+						new_url_img = url_img.get('src')
+						img_down.append(new_url_img)
+					title = img_html.title.string
+					title_Path.append(title)
+					img_down.append(new_imgUrl)
+					#print("标题：%s"%title)
+					print("添加%s到下载列表："%new_imgUrl)
 		except Exception as e:
 			print(e)
 
