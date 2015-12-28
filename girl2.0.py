@@ -64,19 +64,19 @@ class pysql:
 		sql = "select stanPath from stanpath_table"  #获取待下载url池
 		self.cur.execute(sql)
 		for each in self.cur:
-			p_stanPath.append(each)
+			p_stanPath.append(each[0])
 		sql = "select existPath from existpath_table" #获取已下载的url地址池
 		self.cur.execute(sql)
 		for each in self.cur:
-			p_existPath.append(each)
+			p_existPath.append(each[0])
 		sql = "select img_down from img_down_table" #获取待下载的img地址池
 		self.cur.execute(sql)
 		for each in self.cur:
-			img_down.append(each)
+			img_down.append(each[0])
 		sql = "select title_Path from title_path_table" #获取待下载的title地址池
 		self.cur.execute(sql)
 		for each in self.cur:
-			title_Path.append(each)
+			title_Path.append(each[0])
 class spider:
 	def __init__(self,url):
 		self.img_downThreadNum = 4
@@ -235,7 +235,7 @@ def pulldata():
 		db.closeDB()
 		print("初始化获取地址池失败")
 if __name__ == "__main__":
-	#pulldata()
+	pulldata()
 	url = r"http://www.ugirl.cc"#input("输入目标网址:\n")
 	imgload = spider(url)
 	imgload.upup()
