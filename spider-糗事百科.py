@@ -43,14 +43,17 @@ class pysql:
 			sql = "INSERT INTO existpath_table(existPath)VALUES(\'"+url+"\')"
 			self.cur.execute(sql)
 			self.conn.commit()
-		self.deldate('img_down_table')
+		self.deldate('qsbktext_table')
 		for url in img_down:
-			text= url.split("&img=")[0]
+			text= str(url.split("&img=")[0])
 			img_urlbd = url.split("&img=")[1]
-			sql = "INSERT INTO img_down_table(text,img)VALUES(\'"+text+"\',\'"+img_urlbd+"\')"
-			self.cur.execute(sql)
+			sql = r"INSERT INTO qsbktext_table(text)VALUES(%s)"
+			self.cur.execute(sql,(text))
 			self.conn.commit()
-
+	def deldate(self,table):               #删除table中的数据
+		sql = "TRUNCATE TABLE "+table
+		self.cur.execute(sql)
+		self.conn.commit()
 class spider:
 	def __init__(self,url):
 		self.img_downThreadNum = 4
@@ -68,9 +71,11 @@ class superUrl(threading.Thread):
 	def run(self):
 		global p_stanPath
 		global p_existPath
+		i = 0
 		while(len(p_stanPath)!=0):
 			try:
 				url = p_stanPath.popleft()
+				print("正在爬%s i=%s"%(url,i))
 				url_obj = requests.get(url,data=None,headers=self.headers(url))
 				html = BeautifulSoup(url_obj.text, "html.parser")
 				Listpage = html.find("ul",class_="pagination")
@@ -88,6 +93,11 @@ class superUrl(threading.Thread):
 					sleep(10)
 				p_existPath.append(url)
 				p_stanPath = deque(set(p_stanPath)-set(p_existPath))
+				i+=1
+				if i>10:
+					pushdata()
+					i = 0
+
 			except urllib.request.URLError as e:
 				print(e)
 				sleep(10)
@@ -97,12 +107,13 @@ class superUrl(threading.Thread):
 			xhhtml = img_html.find('div', id="content-left")
 			for imglist in xhhtml.find_all('div', class_="content"):
 				new_imgUrl = imglist.text
-				this_imgurl = imglist.find_next_siblings('div', class_="thumb")
-				url_img = this_imgurl.find('img')
-				new_url_img = url_img.get('src')
-				if new_url_img is None:
-					new_url_img = ""
-				new_url = new_imgUrl + "&img="+ new_url_img
+				# this_imgurl = imglist.find_next_siblings('div', class_="thumb")
+				# if this_imgurl ==[]:
+				# 	new_url_img = ""
+				# else:
+				# 	url_img = this_imgurl.find('img')
+				# 	new_url_img = url_img.get('src')
+				new_url = new_imgUrl + "&img="+ ""#new_url_img
 				img_down.append(new_url)
 				#print("标题：%s"%title)
 				print("添加%s："%new_url)
@@ -157,6 +168,24 @@ class downThread(threading.Thread):
 	def headers(self,url):
 		headers = {"Host": "www.ugirl.cc","User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0","Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8","Accept-Language":"zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3","Accept-Encoding": "gzip, deflate","Referer":url,"Cookie":"wordpress_logged_in_1659196acd36bd2b798dfa976ded9f1e=%7C1452078328%7C300cdc3567f74a8f71b99d6bfc6bb98b; CNZZDATA1253518311=1277843620-1450516010-%7C1450866964; BDTUJIAID=711e5a906be928a3037ff4af2efce767; PHPSESSID=qlr05lkvjf5n85a4cpvlc8vd55","Connection":"keep-alive"}
 		return headers
+
+def pushdata():
+	db = pysql()
+	global uplock
+	try:
+		print("开始上传地址池")
+		db.connDB()
+		db.update()
+		db.closeDB()
+		uplock = False
+		print("上传地址池成功")
+		print("解锁所有线程")
+	except Exception as e:
+		print(e)
+		db.closeDB()
+		uplock = False
+		print("上传地址池失败")
+
 
 if __name__ == "__main__":
 	url = r"http://www.qiushibaike.com/"#input("输入目标网址:\n")
