@@ -11,20 +11,19 @@ def get_data(path):
     #获取excel数据源
 
     filePath = os.getcwd()+"\\"+path+".xls" #input(u"请将excel的文件路径粘贴进来")
-    is_valid = False
-    try:
-        if os.path.isfile(filePath):
-            filename = os.path.basename(filePath)
-            if filename.split('.')[1] == 'xls':
-                is_valid = True
-        data = None
-        if is_valid:
-            xlApp = win32com.client.Dispatch('Excel.Application')
+    filePath_xlsx = os.getcwd()+"\\"+path+".xlsx"
+    if os.path.isfile(filePath):
+        filename = os.path.basename(filePath)
+        if filename.split('.')[1] == 'xls':
+            xlApp = win32com.client.DispatchEx('Excel.Application')
             data = xlApp.Workbooks.Open(filePath)
-    except Exception as e:
-        print("错误%s"%e)
-        return None
-    return data
+            return data
+    else:
+        filename = os.path.basename(filePath_xlsx)
+        if filename.split('.')[1] == 'xlsx':
+            xlApp = win32com.client.DispatchEx('Excel.Application')
+            data = xlApp.Workbooks.Open(filePath_xlsx)
+            return data
 
 def formTime(gTime): #切割初始时间跟结束时间
     timeList = gTime.split('-')
@@ -59,7 +58,7 @@ class time(object):
         self.overTime = overTime
 
 def read_excel(data):
-    sheet2 = list(range(1,data.Worksheets.Count))
+    sheet2 = list(range(1,data.Worksheets.Count + 1))
     for x in sheet2:
         print("%s号副表为：%s"%(x,data.Sheets(x).Name))
     sheet = input("请输入需要计算工时的副表名：\n")

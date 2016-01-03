@@ -1,0 +1,231 @@
+missing module named resource - imported by posix, F:\python\git\girl\time.py
+missing module named posix - imported by os, F:\python\git\girl\time.py
+missing module named _datetime.__doc__ - imported by _datetime, datetime, F:\python\git\girl\time.py
+missing module named _posixsubprocess - imported by subprocess, F:\python\git\girl\time.py
+missing module named _io.DEFAULT_BUFFER_SIZE - imported by _io, io, F:\python\git\girl\time.py
+missing module named _io.BytesIO - imported by _io, io, F:\python\git\girl\time.py
+missing module named _io.open - imported by _io, io, F:\python\git\girl\time.py
+missing module named _io.StringIO - imported by _io, io, F:\python\git\girl\time.py
+missing module named _io.BufferedReader - imported by _io, io, F:\python\git\girl\time.py
+missing module named _io.BufferedRWPair - imported by _io, io, F:\python\git\girl\time.py
+missing module named _io.TextIOWrapper - imported by _io, io, F:\python\git\girl\time.py
+missing module named _io.UnsupportedOperation - imported by _io, io, F:\python\git\girl\time.py
+missing module named _io.BufferedWriter - imported by _io, io, F:\python\git\girl\time.py
+missing module named _io.BlockingIOError - imported by _io, io, F:\python\git\girl\time.py
+missing module named _io.BufferedRandom - imported by _io, io, F:\python\git\girl\time.py
+missing module named _io.IncrementalNewlineDecoder - imported by _io, io, F:\python\git\girl\time.py
+missing module named _io.FileIO - imported by _io, io, F:\python\git\girl\time.py
+missing module named re.compile - imported by re, _strptime, F:\python\git\girl\time.py
+missing module named re.IGNORECASE - imported by re, _strptime, F:\python\git\girl\time.py
+missing module named re.escape - imported by re, _strptime, F:\python\git\girl\time.py
+missing module named _functools.reduce - imported by _functools, functools, F:\python\git\girl\time.py
+missing module named _functools.cmp_to_key - imported by _functools, functools, F:\python\git\girl\time.py
+missing module named _functools.partial - imported by _functools, functools, F:\python\git\girl\time.py
+missing module named _functools._lru_cache_wrapper - imported by _functools, functools, F:\python\git\girl\time.py
+missing module named posix._exit - imported by posix, os, F:\python\git\girl\time.py
+missing module named posix._have_functions - imported by posix, os, F:\python\git\girl\time.py
+missing module named ce - imported by os, F:\python\git\girl\time.py
+missing module named ce._exit - imported by ce, os, F:\python\git\girl\time.py
+missing module named ce._have_functions - imported by ce, os, F:\python\git\girl\time.py
+missing module named builtins.open - imported by builtins, tokenize, tarfile, bz2, F:\python\git\girl\time.py
+missing module named builtins.abs - imported by builtins, operator, F:\python\git\girl\time.py
+missing module named _operator.__doc__ - imported by _operator, operator, F:\python\git\girl\time.py
+missing module named collections.ChainMap - imported by collections, string, F:\python\git\girl\time.py
+missing module named collections.OrderedDict - imported by collections, enum, inspect, email._header_value_parser, unittest.util, F:\python\git\girl\time.py
+missing module named collections.deque - imported by collections, threading, contextlib, ast, shlex, pydoc, email.feedparser, F:\python\git\girl\time.py
+missing module named collections.namedtuple - imported by collections, selectors, difflib, inspect, urllib.parse, ssl, unittest.util, doctest, functools, F:\python\git\girl\time.py
+missing module named _heapq._heapreplace_max - imported by _heapq, heapq, F:\python\git\girl\time.py
+missing module named _heapq._heapify_max - imported by _heapq, heapq, F:\python\git\girl\time.py
+missing module named _heapq._heappop_max - imported by _heapq, heapq, F:\python\git\girl\time.py
+missing module named heapq.nlargest - imported by heapq, difflib, F:\python\git\girl\time.py
+missing module named inspect.CO_GENERATOR - imported by inspect, bdb, F:\python\git\girl\time.py
+missing module named _opcode.stack_effect - imported by _opcode, opcode, F:\python\git\girl\time.py
+missing module named readline - imported by cmd, code, pdb, F:\python\git\girl\time.py
+missing module named functools.singledispatch - imported by functools, pkgutil, F:\python\git\girl\time.py
+missing module named _imp.release_lock - imported by _imp, imp, F:\python\git\girl\time.py
+missing module named _imp.lock_held - imported by _imp, imp, F:\python\git\girl\time.py
+missing module named _imp.is_frozen_package - imported by _imp, imp, F:\python\git\girl\time.py
+missing module named _imp._fix_co_filename - imported by _imp, imp, F:\python\git\girl\time.py
+missing module named _imp.acquire_lock - imported by _imp, imp, F:\python\git\girl\time.py
+missing module named _imp.is_builtin - imported by _imp, imp, F:\python\git\girl\time.py
+missing module named _imp.get_frozen_object - imported by _imp, imp, F:\python\git\girl\time.py
+missing module named _imp.is_frozen - imported by _imp, imp, F:\python\git\girl\time.py
+missing module named _imp.init_frozen - imported by _imp, imp, F:\python\git\girl\time.py
+missing module named _imp.create_dynamic - imported by _imp, imp, F:\python\git\girl\time.py
+excluded module named _frozen_importlib - imported by importlib, importlib.abc, F:\python\git\girl\time.py
+missing module named _frozen_importlib_external - imported by importlib._bootstrap, importlib, importlib.abc, F:\python\git\girl\time.py
+missing module named zipimport.zipimporter - imported by zipimport, pkgutil, F:\python\git\girl\time.py
+missing module named win32api.RegQueryValueEx - imported by win32api, platform, F:\python\git\girl\time.py
+missing module named win32api.GetVersionEx - imported by win32api, platform, F:\python\git\girl\time.py
+missing module named win32api.RegOpenKeyEx - imported by win32api, platform, F:\python\git\girl\time.py
+missing module named win32api.RegCloseKey - imported by win32api, platform, F:\python\git\girl\time.py
+missing module named win32con.VER_NT_WORKSTATION - imported by win32con, platform, F:\python\git\girl\time.py
+missing module named _scproxy._get_proxy_settings - imported by _scproxy, urllib.request
+missing module named _scproxy._get_proxies - imported by _scproxy, urllib.request
+missing module named _scproxy - imported by urllib.request
+missing module named 'org.python'.imp - imported by 'org.python', xml.sax
+missing module named 'org.python' - imported by pickle, xml.sax
+missing module named 'org.python'.PyStringMap - imported by 'org.python', pickle
+missing module named 'java.lang'.Exception - imported by 'java.lang', xml.sax._exceptions
+missing module named xml.parsers.expat.ParserCreate - imported by xml.parsers.expat, plistlib, F:\python\git\girl\time.py
+missing module named java - imported by platform, F:\python\git\girl\time.py
+missing module named java.System - imported by java, platform, F:\python\git\girl\time.py
+missing module named 'java.lang' - imported by platform, F:\python\git\girl\time.py, xml.sax._exceptions
+missing module named vms_lib - imported by platform, F:\python\git\girl\time.py
+missing module named _winapi.SW_HIDE - imported by _winapi, subprocess, F:\python\git\girl\time.py
+missing module named _winapi.STARTF_USESTDHANDLES - imported by _winapi, subprocess, F:\python\git\girl\time.py
+missing module named _winapi.STD_ERROR_HANDLE - imported by _winapi, subprocess, F:\python\git\girl\time.py
+missing module named _winapi.STD_INPUT_HANDLE - imported by _winapi, subprocess, F:\python\git\girl\time.py
+missing module named _winapi.CREATE_NEW_PROCESS_GROUP - imported by _winapi, subprocess, F:\python\git\girl\time.py
+missing module named _winapi.STARTF_USESHOWWINDOW - imported by _winapi, subprocess, F:\python\git\girl\time.py
+missing module named _winapi.CREATE_NEW_CONSOLE - imported by _winapi, subprocess, F:\python\git\girl\time.py
+missing module named _winapi.STD_OUTPUT_HANDLE - imported by _winapi, subprocess, F:\python\git\girl\time.py
+missing module named termios - imported by tty, F:\python\git\girl\time.py, getpass
+missing module named _ssl.OPENSSL_VERSION_NUMBER - imported by _ssl, ssl, F:\python\git\girl\time.py
+missing module named _ssl.OPENSSL_VERSION_INFO - imported by _ssl, ssl, F:\python\git\girl\time.py
+missing module named _ssl.OPENSSL_VERSION - imported by _ssl, ssl, F:\python\git\girl\time.py
+missing module named _ssl._SSLContext - imported by _ssl, ssl, F:\python\git\girl\time.py
+missing module named _ssl.MemoryBIO - imported by _ssl, ssl, F:\python\git\girl\time.py
+missing module named _ssl.SSLWantReadError - imported by _ssl, ssl, F:\python\git\girl\time.py
+missing module named _ssl.SSLZeroReturnError - imported by _ssl, ssl, F:\python\git\girl\time.py
+missing module named _ssl.SSLWantWriteError - imported by _ssl, ssl, F:\python\git\girl\time.py
+missing module named _ssl.SSLSyscallError - imported by _ssl, ssl, F:\python\git\girl\time.py
+missing module named _ssl.SSLEOFError - imported by _ssl, ssl, F:\python\git\girl\time.py
+missing module named _ssl.SSLError - imported by _ssl, ssl, F:\python\git\girl\time.py
+missing module named _ssl.CERT_REQUIRED - imported by _ssl, ssl, F:\python\git\girl\time.py
+missing module named _ssl.CERT_NONE - imported by _ssl, ssl, F:\python\git\girl\time.py
+missing module named _ssl.CERT_OPTIONAL - imported by _ssl, ssl, F:\python\git\girl\time.py
+missing module named _ssl.nid2obj - imported by _ssl, ssl, F:\python\git\girl\time.py
+missing module named _ssl.txt2obj - imported by _ssl, ssl, F:\python\git\girl\time.py
+missing module named _ssl.RAND_status - imported by _ssl, ssl, F:\python\git\girl\time.py
+missing module named _ssl.RAND_bytes - imported by _ssl, ssl, F:\python\git\girl\time.py
+missing module named _ssl.RAND_add - imported by _ssl, ssl, F:\python\git\girl\time.py
+missing module named _ssl.RAND_pseudo_bytes - imported by _ssl, ssl, F:\python\git\girl\time.py
+missing module named _ssl.RAND_egd - imported by _ssl, ssl, F:\python\git\girl\time.py
+missing module named _ssl.HAS_SNI - imported by _ssl, ssl, F:\python\git\girl\time.py
+missing module named _ssl.HAS_NPN - imported by _ssl, ssl, F:\python\git\girl\time.py
+missing module named _ssl.HAS_ALPN - imported by _ssl, ssl, F:\python\git\girl\time.py
+missing module named _ssl.HAS_ECDH - imported by _ssl, ssl, F:\python\git\girl\time.py
+missing module named _ssl._OPENSSL_API_VERSION - imported by _ssl, ssl, F:\python\git\girl\time.py
+missing module named _ssl.enum_certificates - imported by _ssl, ssl, F:\python\git\girl\time.py
+missing module named _ssl.enum_crls - imported by _ssl, ssl, F:\python\git\girl\time.py
+missing module named time.strptime - imported by time, ssl, F:\python\git\girl\time.py
+missing module named functools.partial - imported by functools, operator, email.charset, F:\python\git\girl\time.py
+missing module named os.urandom - imported by os, random, F:\python\git\girl\time.py
+missing module named _hashlib.pbkdf2_hmac - imported by _hashlib, hashlib, F:\python\git\girl\time.py
+missing module named hashlib.sha512 - imported by hashlib, random, F:\python\git\girl\time.py
+missing module named _dummy_threading - imported by dummy_threading, F:\python\git\girl\time.py
+missing module named _dummy_threading.__all__ - imported by _dummy_threading, dummy_threading, F:\python\git\girl\time.py
+missing module named dummy_threading.RLock - imported by dummy_threading, bz2, F:\python\git\girl\time.py
+missing module named _bz2.BZ2Decompressor - imported by _bz2, bz2, F:\python\git\girl\time.py
+missing module named _bz2.BZ2Compressor - imported by _bz2, bz2, F:\python\git\girl\time.py
+missing module named _lzma._encode_filter_properties - imported by _lzma, lzma, F:\python\git\girl\time.py
+missing module named _lzma._decode_filter_properties - imported by _lzma, lzma, F:\python\git\girl\time.py
+missing module named grp - imported by tarfile, shutil, F:\python\git\girl\time.py
+missing module named grp.getgrnam - imported by grp, shutil, F:\python\git\girl\time.py
+missing module named nt._exit - imported by nt, os, F:\python\git\girl\time.py
+missing module named nt._getvolumepathname - imported by nt, ntpath, F:\python\git\girl\time.py
+missing module named nt._getfullpathname - imported by nt, ntpath, F:\python\git\girl\time.py
+missing module named nt._getfinalpathname - imported by nt, ntpath, F:\python\git\girl\time.py
+missing module named nt._isdir - imported by nt, ntpath, F:\python\git\girl\time.py
+missing module named nt._have_functions - imported by nt, os, F:\python\git\girl\time.py
+missing module named math.exp - imported by math, random, F:\python\git\girl\time.py
+missing module named math.log - imported by math, random, F:\python\git\girl\time.py
+missing module named math.e - imported by math, random, F:\python\git\girl\time.py
+missing module named math.ceil - imported by math, random, F:\python\git\girl\time.py
+missing module named math.pi - imported by math, random, F:\python\git\girl\time.py
+missing module named math.cos - imported by math, random, F:\python\git\girl\time.py
+missing module named math.sqrt - imported by math, random, F:\python\git\girl\time.py
+missing module named math.sin - imported by math, random, F:\python\git\girl\time.py
+missing module named math.acos - imported by math, random, F:\python\git\girl\time.py
+missing module named socket.SOCK_STREAM - imported by socket, ssl, F:\python\git\girl\time.py
+missing module named socket.AF_INET - imported by socket, ssl, F:\python\git\girl\time.py
+missing module named socket.SOL_SOCKET - imported by socket, ssl, F:\python\git\girl\time.py
+missing module named socket.SO_TYPE - imported by socket, ssl, F:\python\git\girl\time.py
+missing module named time.monotonic - imported by time, subprocess, threading, socketserver, F:\python\git\girl\time.py
+missing module named threading.current_thread - imported by threading, _threading_local, F:\python\git\girl\time.py
+missing module named threading.RLock - imported by threading, _threading_local, bz2, F:\python\git\girl\time.py
+missing module named pwd.getpwnam - imported by pwd, shutil, F:\python\git\girl\time.py
+missing module named pwd - imported by posixpath, tarfile, shutil, http.server, webbrowser, F:\python\git\girl\time.py, netrc, getpass
+missing module named functools.wraps - imported by functools, signal, contextlib, unittest.result, unittest.signals, F:\python\git\girl\time.py
+missing module named ntpath.commonprefix - imported by ntpath, unittest.util, F:\python\git\girl\time.py
+missing module named _thread.allocate_lock - imported by _thread, _strptime, F:\python\git\girl\time.py
+missing module named _thread.stack_size - imported by _thread, threading, F:\python\git\girl\time.py
+missing module named _thread._local - imported by _thread, threading, F:\python\git\girl\time.py
+missing module named _thread.RLock - imported by _thread, functools, F:\python\git\girl\time.py
+missing module named _thread.get_ident - imported by _thread, reprlib, F:\python\git\girl\time.py
+missing module named _collections.deque - imported by _collections, threading, collections, F:\python\git\girl\time.py
+missing module named _collections.defaultdict - imported by _collections, collections, F:\python\git\girl\time.py
+missing module named _collections.OrderedDict - imported by _collections, collections, F:\python\git\girl\time.py
+missing module named _collections._count_elements - imported by _collections, collections, F:\python\git\girl\time.py
+missing module named itertools.islice - imported by itertools, threading, reprlib, pickle, F:\python\git\girl\time.py
+missing module named itertools.count - imported by itertools, threading, F:\python\git\girl\time.py
+missing module named itertools.starmap - imported by itertools, collections, F:\python\git\girl\time.py
+missing module named itertools.chain - imported by itertools, tokenize, collections, F:\python\git\girl\time.py
+missing module named itertools.repeat - imported by itertools, tokenize, collections, F:\python\git\girl\time.py
+missing module named copy.deepcopy - imported by copy, weakref, email.generator, F:\python\git\girl\time.py
+missing module named types.MappingProxyType - imported by types, enum, email.headerregistry, functools, F:\python\git\girl\time.py
+missing module named types.DynamicClassAttribute - imported by types, enum, F:\python\git\girl\time.py
+missing module named types.ModuleType - imported by types, pkgutil, F:\python\git\girl\time.py
+missing module named types.MethodType - imported by types, random, F:\python\git\girl\time.py
+missing module named types.BuiltinMethodType - imported by types, random, F:\python\git\girl\time.py
+missing module named types.ClassType - imported by types, win32com.client
+missing module named _weakref.proxy - imported by _weakref, weakref, collections, F:\python\git\girl\time.py
+missing module named _weakref.ReferenceType - imported by _weakref, weakref, F:\python\git\girl\time.py
+missing module named _weakref.ProxyType - imported by _weakref, weakref, F:\python\git\girl\time.py
+missing module named _weakref.getweakrefcount - imported by _weakref, weakref, F:\python\git\girl\time.py
+missing module named _weakref.ref - imported by _weakref, _weakrefset, weakref, F:\python\git\girl\time.py
+missing module named _weakref.CallableProxyType - imported by _weakref, weakref, F:\python\git\girl\time.py
+missing module named _weakref.getweakrefs - imported by _weakref, weakref, F:\python\git\girl\time.py
+missing module named org - imported by copy, F:\python\git\girl\time.py
+missing module named org.PyStringMap - imported by org, copy, F:\python\git\girl\time.py
+missing module named builtins.str - imported by builtins, locale, F:\python\git\girl\time.py
+missing module named _struct._clearcache - imported by _struct, struct, F:\python\git\girl\time.py
+missing module named _struct.__doc__ - imported by _struct, struct, F:\python\git\girl\time.py
+missing module named struct.unpack - imported by struct, pickle
+missing module named struct.pack - imported by struct, pickle
+missing module named errno.ENOENT - imported by errno, gettext, F:\python\git\girl\time.py
+missing module named _warnings.warn_explicit - imported by _warnings, warnings, F:\python\git\girl\time.py
+missing module named _warnings.warn - imported by _warnings, warnings, F:\python\git\girl\time.py
+missing module named _warnings._defaultaction - imported by _warnings, warnings, F:\python\git\girl\time.py
+missing module named _warnings._filters_mutated - imported by _warnings, warnings, F:\python\git\girl\time.py
+missing module named _warnings._onceregistry - imported by _warnings, warnings, F:\python\git\girl\time.py
+missing module named _warnings.filters - imported by _warnings, warnings, F:\python\git\girl\time.py
+missing module named _sre.MAXGROUPS - imported by _sre, sre_constants, F:\python\git\girl\time.py
+missing module named _sre.MAXREPEAT - imported by _sre, sre_constants, F:\python\git\girl\time.py
+missing module named sre_constants.BRANCH - imported by sre_constants, re, F:\python\git\girl\time.py
+missing module named sre_constants.SUBPATTERN - imported by sre_constants, re, F:\python\git\girl\time.py
+missing module named unicodedata.ucd_3_2_0 - imported by unicodedata, stringprep, encodings.idna, F:\python\git\girl\time.py
+missing module named sys.modules - imported by sys, dummy_threading, F:\python\git\girl\time.py
+missing module named sys.exc_info - imported by sys, win32com.server.dispatcher
+missing module named sys.maxsize - imported by sys, pickle
+missing module named binascii.b2a_qp - imported by binascii, quopri, F:\python\git\girl\time.py
+missing module named binascii.a2b_qp - imported by binascii, quopri, F:\python\git\girl\time.py
+missing module named binascii.b2a_base64 - imported by binascii, email.base64mime, F:\python\git\girl\time.py
+missing module named binascii.a2b_base64 - imported by binascii, email.base64mime, F:\python\git\girl\time.py
+missing module named pythoncom.DISPATCH_PROPERTYPUT - imported by pythoncom, win32com.server.policy
+missing module named pythoncom.DISPID_NEWENUM - imported by pythoncom, win32com.server.policy
+missing module named pythoncom.DISPID_PROPERTYPUT - imported by pythoncom, win32com.server.policy
+missing module named pythoncom.DISPID_STARTENUM - imported by pythoncom, win32com.server.policy
+missing module named pythoncom.DISPID_COLLECT - imported by pythoncom, win32com.server.policy
+missing module named pythoncom.DISPATCH_PROPERTYGET - imported by pythoncom, win32com.server.policy
+missing module named pythoncom.DISPATCH_METHOD - imported by pythoncom, win32com.server.policy
+missing module named pythoncom.DISPATCH_PROPERTYPUTREF - imported by pythoncom, win32com.server.policy
+missing module named pythoncom.DISPID_VALUE - imported by pythoncom, win32com.server.policy
+missing module named pythoncom.DISPID_DESTRUCTOR - imported by pythoncom, win32com.server.policy
+missing module named pythoncom.DISPID_CONSTRUCTOR - imported by pythoncom, win32com.server.policy
+missing module named pythoncom.DISPID_EVALUATE - imported by pythoncom, win32com.server.policy
+missing module named pythoncom.DISPID_UNKNOWN - imported by pythoncom, win32com.server.policy
+missing module named pywintypes.IIDType - imported by pywintypes, win32com.client.dynamic
+missing module named pywintypes.TimeType - imported by pywintypes, win32com.client.build
+missing module named _pickle.Unpickler - imported by _pickle, pickle
+missing module named _pickle.dumps - imported by _pickle, pickle
+missing module named _pickle.Pickler - imported by _pickle, pickle
+missing module named _pickle.load - imported by _pickle, pickle
+missing module named _pickle.loads - imported by _pickle, pickle
+missing module named _pickle.PickleError - imported by _pickle, pickle
+missing module named _pickle.PicklingError - imported by _pickle, pickle
+missing module named _pickle.UnpicklingError - imported by _pickle, pickle
+missing module named _pickle.dump - imported by _pickle, pickle
+missing module named win32com.client._get_good_object_ - imported by win32com.client, win32com.client.util
+missing module named win32com.client.Dispatch - imported by win32com.client, win32com.client.util, win32com.client.makepy, F:\python\git\girl\time.py
